@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+# Hooks
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- Là những hàm được cung cấp bởi reactJS. Mỗi cái hàm này có những tính năng nhất định, 
+- Hooks chỉ dùng cho function component
+- Component đơn giản và trở nên dễ hiểu
+    - Không bị chia logic ra như methods trong lifecycle của Class Component
+    - Không cần sử dụng "this"
+- Sử dụng Hooks khi nào?
+    - Dự án mới => Hooks
+    - Dự án cũ 
+        - Component mới => Function component + Hooks
+        - Component cũ => Giữ nguyên, có thời gian tối ưu sau
+    - Logic nghiệp vụ cần sử dụng các tính chất của OOP => Class Component
+- Người mới nên bắt đầu với Function component vì nó dễ tiếp cận hơn
+- Có thể kết hợp sử dụng Function component & Class component
 
-## Available Scripts
+## useState
 
-In the project directory, you can run:
+### Dùng khi nào?
+- Khi muốn dữ liệu thay đổi thì giao diện tự động được cập nhật ( render lại dữ liệu)
 
-### `npm start`
+### Cách dùng
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+import {useState} from 'react'
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+function Component(){
+const [state,setState]=useState(initState)
+...
+}
 
-### `npm test`
+### Lưu ý
+- Component được re-render sau khi setState
+- Initial state chỉ dùng lần đầu
+- Set state là thay thế state bằng giá trị mới
+-------------------------------------------------------------
+## useEffect()
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+ - khi thực hiện các side effects 
 
-### `npm run build`
+- Nó có thể giúp viết các đoạn code:
+    - Update DOM
+    - Call API
+    - Listen DOM events
+        - Scroll
+        - Resize
+- Cleanup
+    - Remove listener / Unsubscribe 
+    - Clear timer
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Có 3 trường hợp :
+    - useEffect(callback)
+        -  Gọi callback mỗi khi component re-render
+        - Gọi callback sau khi component thêm element vào DOM
+    - useEffect(callback,[])
+        - Chỉ gọi lại callback 1 lần sau khi component mounted
+    - useEffect(callback,[deps])
+        - Callback luôn được gọi lại mỗi khi deps thay đổi
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---------------------------
+#### Đúng với cả 3 trường hợp
+1. Gọi callback sau khi component thêm element vào DOM
+2. Callback luôn được gọi sau khi component mounted
+3. Cleanup function luôn được gọi trước khi component unmounted
+4. Cleanup function luôn được gọi trước khi callback được gọi (trừ lần mounted)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Lưu ý : 
+- Tránh viết nhiều logic trong 1 useEffect()
 
-### `npm run eject`
+------------------------------------------------------
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## useLayoutEffect()
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-------------------------------------------------------
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## useRef()
+- Là 1 hàm trả về một đối tượng ref có thể thay đổi thuộc tính .current được khởi tạo cho dối số được truyền vào (initialValue). Đối tượng được trả về sẽ tồn tại trong toàn bộ thời gian tồn tại của thành phần
+----------------------------------------------------
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## React.memo()
 
-## Learn More
+- memo() -> Higher Oder Component 
+- Hoạt động giống như React.PureComponent(), nhưng nó là function Component thay vì là class Component.
+- Được sử dụng để bọc các component, React sẽ bỏ qua việc render lại component và sử dụng kết quả đã render lần cuối cùng nếu component render cùng kết quả với cùng props
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+--------------------------------------------
 
-### Code Splitting
+## useCallback()
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- useCallback tập trung giải quyết vấn đề về performance, khi mà các callback function được tạo ở functional component cha pass xuống component con luôn bị tạo mới, khiến cho con luôn bị re-render
 
-### Analyzing the Bundle Size
+------------------------------------------
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## useMemo()
 
-### Making a Progressive Web App
+- useMemo là hàm giống như helper cho phép chỉ định:lưu lại kết quả của hàm nào và những giá trị nào sẽ thay đổi kết quả đó
+- Tập trung vào việc tránh lặp đi lặp lại các logic tính toán nặng nề
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+------------------------------------------
+ 
+## useReducer()
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Init state 
+2. Action: 
+3. Reducer
+4. Dispatch 
