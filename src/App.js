@@ -1,11 +1,18 @@
-import {useCallback, useState} from 'react'
-import Content from './useEffect-demo'
+import {useCallback, useState,useContext} from 'react'
+import Content from './Content'
+import './App.css'
 import Avatar from './useEffect-timer'
 import FakeChat from './useEffect-FakeChat'
 import Count from './useRef-demo'
 import Increase from './reactMemo-demo'
 import Product from './useMemo'
-import Job from './useReducer-demo'
+import TodoApp from './Todo'
+import {ThemeProvider} from './ThemeContext'
+import {ThemeContext} from './ThemeContext'
+
+
+
+
 function App() {
 
   // Demo useState()
@@ -24,6 +31,9 @@ const handleIncrease = useCallback(() => {
     setCount(prevCount => prevCount +1)
   },[])
   
+  
+  const context = useContext(ThemeContext)
+  
   return (
 
     // Demo useState()
@@ -33,7 +43,7 @@ const handleIncrease = useCallback(() => {
      <button onClick = {handleIncrease}>Increase</button>
      </div>
     */
-   
+    
    <div style = {{padding:20}}>
      {/* <button onClick = {()=> setShow(!show)}>Toggle</button>
     {show&&<Count />} */}
@@ -45,10 +55,17 @@ const handleIncrease = useCallback(() => {
     {/* Demo useMemo
      <Product/>    */}
     
-    Demo useReducer
-    <Job/>
-   </div>  
+    {/* Demo useReducer
+    <TodoApp/> */}
+
+    {/* Demo useContext() */}
+    
+    <button onClick={context.toggleTheme}>Toggle theme</button>
+    <Content />
+   </div>    
+   
     );
+
 }
  
 export default App;
